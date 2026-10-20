@@ -9,10 +9,19 @@ export function verifyJWT(req) {
     if (!token) {
       return null;
     }
-    const decoded = jwt.verify(token, JWT_SECRET);
-    return decoded;
+    return jwt.verify(token, JWT_SECRET);
   } catch (err) {
     console.log(err);
     return null;
   }
 }
+
+
+const isProd = process.env.NODE_ENV === "production";
+
+export const TOKEN_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+  path: "/",
+};
